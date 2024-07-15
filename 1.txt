@@ -26,18 +26,19 @@ CREATE TABLE Iss_rec (
     FOREIGN KEY (Mem_no) REFERENCES Membership(Mem_no) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (book_no) REFERENCES Book(book_no) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 -- Insert records into Student table
 INSERT INTO Student (Stud_no, Stud_name) VALUES
-(1, 'Alice'),
-(2, 'Bob'),
-(3, 'Charlie'),
-(4, 'David'),
-(5, 'Eve'),
-(6, 'Frank'),
-(7, 'Grace'),
-(8, 'Heidi'),
-(9, 'Ivan'),
-(10, 'Judy');
+(1, 'Ram'),
+(2, 'Shyam'),
+(3, 'Hari'),
+(4, 'Gita'),
+(5, 'Sita'),
+(6, 'Nabin'),
+(7, 'Sunita'),
+(8, 'Prabin'),
+(9, 'Anita'),
+(10, 'Kiran');
 
 -- Insert records into Membership table
 INSERT INTO Membership (Mem_no, Stud_no) VALUES
@@ -54,16 +55,16 @@ INSERT INTO Membership (Mem_no, Stud_no) VALUES
 
 -- Insert records into Book table
 INSERT INTO Book (book_no, book_name, author) VALUES
-(1, 'ram', 'Author 1'),
-(2, 'Book B', 'Author 2'),
-(3, 'Book C', 'Author 3'),
-(4, 'Book D', 'Author 4'),
-(5, 'Book E', 'Author 5'),
-(6, 'Book F', 'Author 6'),
-(7, 'Book G', 'Author 7'),
-(8, 'Book H', 'Author 8'),
-(9, 'Book I', 'Author 9'),
-(10, 'Book J', 'Author 10');
+(1, 'Nepali Book A', 'Author 1'),
+(2, 'Nepali Book B', 'Author 2'),
+(3, 'Nepali Book C', 'Author 3'),
+(4, 'Nepali Book D', 'Author 4'),
+(5, 'Nepali Book E', 'Author 5'),
+(6, 'Nepali Book F', 'Author 6'),
+(7, 'Nepali Book G', 'Author 7'),
+(8, 'Nepali Book H', 'Author 8'),
+(9, 'Nepali Book I', 'Author 9'),
+(10, 'Nepali Book J', 'Author 10');
 
 -- Insert records into Iss_rec table
 INSERT INTO Iss_rec (iss_no, iss_date, Mem_no, book_no) VALUES
@@ -77,20 +78,25 @@ INSERT INTO Iss_rec (iss_no, iss_date, Mem_no, book_no) VALUES
 (8, '2024-07-15', 8, 8),
 (9, '2024-07-15', 9, 9),
 (10, '2024-07-15', 10, 10);
+
+-- Queries
 SELECT s.Stud_name, m.Mem_no
 FROM Student s
 JOIN Membership m ON s.Stud_no = m.Stud_no;
+
 SELECT s.Stud_name, b.book_name, ir.iss_date
 FROM Iss_rec ir
 JOIN Membership m ON ir.Mem_no = m.Mem_no
 JOIN Student s ON m.Stud_no = s.Stud_no
 JOIN Book b ON ir.book_no = b.book_no
 WHERE ir.iss_date = CURDATE();
+
 SELECT s.Stud_name, COUNT(ir.book_no) AS books_borrowed
 FROM Student s
 JOIN Membership m ON s.Stud_no = m.Stud_no
 JOIN Iss_rec ir ON m.Mem_no = ir.Mem_no
 GROUP BY s.Stud_name;
+
 SELECT b.book_name
 FROM Iss_rec ir
 JOIN Membership m ON ir.Mem_no = m.Mem_no
