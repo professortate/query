@@ -1,0 +1,133 @@
+-- Create the AirlineDB database
+CREATE DATABASE AirlineDB;
+USE AirlineDB;
+
+-- Create tables
+CREATE TABLE Employees (
+    eid INT PRIMARY KEY,
+    ename VARCHAR(100) NOT NULL,
+    salary INT
+);
+
+CREATE TABLE Aircraft (
+    aid INT PRIMARY KEY,
+    aname VARCHAR(100) NOT NULL,
+    cruisingrange INT
+);
+
+CREATE TABLE Certified (
+    eid INT,
+    aid INT,
+    PRIMARY KEY (eid, aid),
+    FOREIGN KEY (eid) REFERENCES Employees(eid) ON DELETE CASCADE,
+    FOREIGN KEY (aid) REFERENCES Aircraft(aid) ON DELETE CASCADE
+);
+
+CREATE TABLE Flights (
+    flno INT PRIMARY KEY,
+    `from` VARCHAR(50) NOT NULL,
+    `to` VARCHAR(50) NOT NULL,
+    distance INT,
+    departs TIME,
+    arrives TIME,
+    price INT
+);
+
+-- Insert records into Employees table
+INSERT INTO Employees (eid, ename, salary) VALUES
+(1, 'Ram', 90000),
+(2, 'Shyam', 85000),
+(3, 'Hari', 80000),
+(4, 'Sita', 95000),
+(5, 'Gita', 75000),
+(6, 'Krishna', 65000),
+(7, 'Radha', 70000),
+(8, 'Laxmi', 78000),
+(9, 'Mohan', 72000),
+(10, 'Sunita', 68000);
+
+-- Insert records into Aircraft table
+INSERT INTO Aircraft (aid, aname, cruisingrange) VALUES
+(1, 'Boeing 737', 3000),
+(2, 'Airbus A320', 3500),
+(3, 'Boeing 747', 8000),
+(4, 'Concorde', 4000),
+(5, 'Boeing 777', 7500),
+(6, 'Airbus A380', 10000),
+(7, 'Cessna 172', 800),
+(8, 'Boeing 787', 9000),
+(9, 'Gulfstream G550', 6750),
+(10, 'Bombardier CRJ', 2000);
+
+-- Insert records into Flights table
+INSERT INTO Flights (flno, `from`, `to`, distance, departs, arrives, price) VALUES
+(1, 'Kathmandu', 'Pokhara', 200, '08:00:00', '09:00:00', 300),
+(2, 'Pokhara', 'Biratnagar', 300, '09:00:00', '10:30:00', 200),
+(3, 'Biratnagar', 'Janakpur', 150, '10:00:00', '11:00:00', 150),
+(4, 'Janakpur', 'Bharatpur', 170, '11:00:00', '12:30:00', 180),
+(5, 'Bharatpur', 'Nepalgunj', 250, '12:00:00', '14:00:00', 250),
+(6, 'Nepalgunj', 'Dhangadhi', 180, '13:00:00', '14:30:00', 120),
+(7, 'Dhangadhi', 'Kathmandu', 350, '14:00:00', '16:00:00', 320),
+(8, 'Kathmandu', 'Biratnagar', 400, '16:00:00', '17:30:00', 500),
+(9, 'Biratnagar', 'Lalitpur', 300, '17:00:00', '18:30:00', 100),
+(10, 'Lalitpur', 'Bhaktapur', 50, '18:00:00', '18:30:00', 150);
+
+-- Insert records into Certified table
+INSERT INTO Certified (eid, aid) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(2, 4),
+(3, 5),
+(3, 6),
+(4, 7),
+(4, 8),
+(5, 9),
+(5, 10),
+(1, 3),
+(2, 5),
+(3, 7),
+(4, 9),
+(5, 1);
+
+-- Queries
+-- Find the aircrafts whose minimum certified employee's salary is greater than 80000
+SELECT a.aname
+FROM Aircraft a
+JOIN Certified c ON a.aid = c.aid
+JOIN Employees e ON c.eid = e.eid
+GROUP BY a.aname
+HAVING MIN(e.salary) > 80000;
+
+-- Find the maximum cruising range of aircrafts certified by employees who have certified more than 3 aircrafts
+SELECT c.eid, MAX(a.cruisingrange) AS MaxCruisingRange
+FROM Certified c
+JOIN Aircraft a ON c.aid = a.aid
+GROUP BY c.eid
+HAVING COUNT(c.aid) > 3;
+
+-- Find the minimum price of flights from Pokhara to Honolulu (assuming Honolulu is added to cities)
+-- For the sake of continuity, let's add a flight from Pokhara to Honolulu
+INSERT INTO Flights (flno, `from`, `to`, distance, departs, arrives, price) VALUES
+(11, 'Pokhara', 'Honolulu', 7200, '19:00:00', '06:00:00', 600);
+
+SELECT MIN(price) AS MinPrice
+FROM Flights
+WHERE `from` = 'Pokhara' AND `to` = 'Honolulu';
+
+-- Find the names of employees whose salary is less than the minimum price of flights from Pokhara to Honolulu
+SELECT e.ename
+FROM Employees e
+WHERE e.salary < (
+    SELECT MIN(price)
+    FROM Flights
+    WHERE `from` = 'Pokhara' AND `to` = 'Honolulu'
+);
+
+-- Find the second highest salary in the Employees table
+SELECT MAX(salary) AS SecondHighestSalary
+FROM Employees
+WHERE salary < (
+    SELECT MAX(salary)
+    FROM Employees
+);
