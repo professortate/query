@@ -1,8 +1,8 @@
--- Create the database and use it
+
 CREATE DATABASE ProjectDB;
 USE ProjectDB;
 
--- Create the GUIDE table
+
 CREATE TABLE GUIDE (
     Guide_No INT PRIMARY KEY,
     Guide_name VARCHAR(100) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE GUIDE (
     Email_Id VARCHAR(100)
 );
 
--- Create the STUDENT table
+
 CREATE TABLE STUDENT (
     Rollno INT PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE STUDENT (
     FOREIGN KEY (Guide_No) REFERENCES GUIDE(Guide_No) ON DELETE SET NULL
 );
 
--- Create the PROJECT table
+
 CREATE TABLE PROJECT (
     Project_No INT PRIMARY KEY,
     Project_title VARCHAR(100) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE PROJECT (
     FOREIGN KEY (Guide_No) REFERENCES GUIDE(Guide_No) ON DELETE SET NULL
 );
 
--- Create the GROUP_ table
+
 CREATE TABLE GROUP_ (
     Group_Code INT,
     Roll_No INT,
@@ -40,7 +40,7 @@ CREATE TABLE GROUP_ (
     FOREIGN KEY (Roll_No) REFERENCES STUDENT(Rollno) ON DELETE CASCADE
 );
 
--- Create the PROJECT_GROUP table
+
 CREATE TABLE PROJECT_GROUP (
     Group_Code INT,
     Project_No INT,
@@ -50,7 +50,7 @@ CREATE TABLE PROJECT_GROUP (
     FOREIGN KEY (Project_No) REFERENCES PROJECT(Project_No) ON DELETE CASCADE
 );
 
--- Insert records into GUIDE table
+
 INSERT INTO GUIDE (Guide_No, Guide_name, Guide_research_domain, Contact_No, Email_Id) VALUES
 (1, 'Dr. Sharma', 'Data Base', 9876543210, 'sharma@example.com'),
 (2, 'Dr. Verma', 'Artificial Intelligence', 9876543211, 'verma@example.com'),
@@ -58,7 +58,7 @@ INSERT INTO GUIDE (Guide_No, Guide_name, Guide_research_domain, Contact_No, Emai
 (4, 'Dr. Rao', 'Networking', 9876543213, 'rao@example.com'),
 (5, 'Dr. Gupta', 'Data Base', 9876543214, 'gupta@example.com');
 
--- Insert records into STUDENT table
+
 INSERT INTO STUDENT (Rollno, Name, Sem, Degree, Contact_no, Guide_No) VALUES
 (1, 'Arjun', 6, 'B.Tech', 9876543215, 1),
 (2, 'Bhavesh', 6, 'B.Tech', 9876543216, 1),
@@ -71,7 +71,7 @@ INSERT INTO STUDENT (Rollno, Name, Sem, Degree, Contact_no, Guide_No) VALUES
 (9, 'Ishaan', 6, 'B.Tech', 9876543223, 5),
 (10, 'Jaya', 6, 'B.Tech', 9876543224, 5);
 
--- Insert records into PROJECT table
+
 INSERT INTO PROJECT (Project_No, Project_title, Project_Area, Start_dt, Guide_No) VALUES
 (1, 'Library Management System', 'Data Base', '2024-01-01', 1),
 (2, 'Chatbot', 'Artificial Intelligence', '2024-02-01', 2),
@@ -79,7 +79,7 @@ INSERT INTO PROJECT (Project_No, Project_title, Project_Area, Start_dt, Guide_No
 (4, 'Network Security', 'Networking', '2024-04-01', 4),
 (5, 'E-commerce Website', 'Data Base', '2024-05-01', 5);
 
--- Insert records into GROUP_ table
+
 INSERT INTO GROUP_ (Group_Code, Roll_No) VALUES
 (1, 1),
 (1, 2),
@@ -92,7 +92,7 @@ INSERT INTO GROUP_ (Group_Code, Roll_No) VALUES
 (5, 9),
 (5, 10);
 
--- Insert records into PROJECT_GROUP table
+
 INSERT INTO PROJECT_GROUP (Group_Code, Project_No, no_of_students) VALUES
 (1, 1, 2),
 (2, 2, 2),
@@ -100,7 +100,7 @@ INSERT INTO PROJECT_GROUP (Group_Code, Project_No, no_of_students) VALUES
 (4, 4, 2),
 (5, 5, 2);
 
--- Query 1
+
 SELECT g.Guide_name, COUNT(pg.Group_Code) AS NumberOfGroups
 FROM GUIDE g
 JOIN PROJECT p ON g.Guide_No = p.Guide_No
@@ -108,13 +108,13 @@ JOIN PROJECT_GROUP pg ON p.Project_No = pg.Project_No
 GROUP BY g.Guide_name
 HAVING COUNT(pg.Group_Code) > 2;
 
--- Query 2
+
 SELECT p.Project_No, p.Project_title, g.Guide_name
 FROM PROJECT p
 JOIN GUIDE g ON p.Guide_No = g.Guide_No
 WHERE p.Project_Area = 'Data Base';
 
--- Create view
+
 CREATE VIEW student_project_details AS
 SELECT s.Name AS Student_Name, p.Project_title AS Project_Name, g.Guide_name AS Guide_Name
 FROM STUDENT s
@@ -123,5 +123,5 @@ JOIN PROJECT_GROUP pg ON g_.Group_Code = pg.Group_Code
 JOIN PROJECT p ON pg.Project_No = p.Project_No
 JOIN GUIDE g ON p.Guide_No = g.Guide_No;
 
--- Select from view
+
 SELECT * FROM student_project_details;
