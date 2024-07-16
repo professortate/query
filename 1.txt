@@ -27,7 +27,7 @@ CREATE TABLE Iss_rec (
     FOREIGN KEY (book_no) REFERENCES Book(book_no) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Insert records into Student table
+
 INSERT INTO Student (Stud_no, Stud_name) VALUES
 (1, 'Ram'),
 (2, 'Shyam'),
@@ -40,7 +40,7 @@ INSERT INTO Student (Stud_no, Stud_name) VALUES
 (9, 'Anita'),
 (10, 'Kiran');
 
--- Insert records into Membership table
+
 INSERT INTO Membership (Mem_no, Stud_no) VALUES
 (1, 1),
 (2, 2),
@@ -53,7 +53,7 @@ INSERT INTO Membership (Mem_no, Stud_no) VALUES
 (9, 9),
 (10, 10);
 
--- Insert records into Book table
+
 INSERT INTO Book (book_no, book_name, author) VALUES
 (1, 'Nepali Book A', 'Author 1'),
 (2, 'Nepali Book B', 'Author 2'),
@@ -66,7 +66,7 @@ INSERT INTO Book (book_no, book_name, author) VALUES
 (9, 'Nepali Book I', 'Author 9'),
 (10, 'Nepali Book J', 'Author 10');
 
--- Insert records into Iss_rec table
+
 INSERT INTO Iss_rec (iss_no, iss_date, Mem_no, book_no) VALUES
 (1, '2024-07-15', 1, 1),
 (2, '2024-07-15', 2, 2),
@@ -79,7 +79,7 @@ INSERT INTO Iss_rec (iss_no, iss_date, Mem_no, book_no) VALUES
 (9, '2024-07-15', 9, 9),
 (10, '2024-07-15', 10, 10);
 
--- Queries
+
 SELECT s.Stud_name, m.Mem_no
 FROM Student s
 JOIN Membership m ON s.Stud_no = m.Stud_no;
