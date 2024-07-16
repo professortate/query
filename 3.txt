@@ -1,8 +1,8 @@
--- Create the AirlineDB database
+
 CREATE DATABASE AirlineDB;
 USE AirlineDB;
 
--- Create tables
+
 CREATE TABLE Employees (
     eid INT PRIMARY KEY,
     ename VARCHAR(100) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE Flights (
     price INT
 );
 
--- Insert records into Employees table
+
 INSERT INTO Employees (eid, ename, salary) VALUES
 (1, 'Ram', 90000),
 (2, 'Shyam', 85000),
@@ -46,7 +46,7 @@ INSERT INTO Employees (eid, ename, salary) VALUES
 (9, 'Mohan', 72000),
 (10, 'Sunita', 68000);
 
--- Insert records into Aircraft table
+
 INSERT INTO Aircraft (aid, aname, cruisingrange) VALUES
 (1, 'Boeing 737', 3000),
 (2, 'Airbus A320', 3500),
@@ -59,7 +59,7 @@ INSERT INTO Aircraft (aid, aname, cruisingrange) VALUES
 (9, 'Gulfstream G550', 6750),
 (10, 'Bombardier CRJ', 2000);
 
--- Insert records into Flights table
+
 INSERT INTO Flights (flno, `from`, `to`, distance, departs, arrives, price) VALUES
 (1, 'Kathmandu', 'Pokhara', 200, '08:00:00', '09:00:00', 300),
 (2, 'Pokhara', 'Biratnagar', 300, '09:00:00', '10:30:00', 200),
@@ -72,7 +72,7 @@ INSERT INTO Flights (flno, `from`, `to`, distance, departs, arrives, price) VALU
 (9, 'Biratnagar', 'Lalitpur', 300, '17:00:00', '18:30:00', 100),
 (10, 'Lalitpur', 'Bhaktapur', 50, '18:00:00', '18:30:00', 150);
 
--- Insert records into Certified table
+
 INSERT INTO Certified (eid, aid) VALUES
 (1, 1),
 (1, 2),
@@ -90,8 +90,7 @@ INSERT INTO Certified (eid, aid) VALUES
 (4, 9),
 (5, 1);
 
--- Queries
--- Find the aircrafts whose minimum certified employee's salary is greater than 80000
+
 SELECT a.aname
 FROM Aircraft a
 JOIN Certified c ON a.aid = c.aid
@@ -99,15 +98,14 @@ JOIN Employees e ON c.eid = e.eid
 GROUP BY a.aname
 HAVING MIN(e.salary) > 80000;
 
--- Find the maximum cruising range of aircrafts certified by employees who have certified more than 3 aircrafts
+
 SELECT c.eid, MAX(a.cruisingrange) AS MaxCruisingRange
 FROM Certified c
 JOIN Aircraft a ON c.aid = a.aid
 GROUP BY c.eid
 HAVING COUNT(c.aid) > 3;
 
--- Find the minimum price of flights from Pokhara to Honolulu (assuming Honolulu is added to cities)
--- For the sake of continuity, let's add a flight from Pokhara to Honolulu
+
 INSERT INTO Flights (flno, `from`, `to`, distance, departs, arrives, price) VALUES
 (11, 'Pokhara', 'Honolulu', 7200, '19:00:00', '06:00:00', 600);
 
@@ -115,7 +113,6 @@ SELECT MIN(price) AS MinPrice
 FROM Flights
 WHERE `from` = 'Pokhara' AND `to` = 'Honolulu';
 
--- Find the names of employees whose salary is less than the minimum price of flights from Pokhara to Honolulu
 SELECT e.ename
 FROM Employees e
 WHERE e.salary < (
@@ -124,7 +121,7 @@ WHERE e.salary < (
     WHERE `from` = 'Pokhara' AND `to` = 'Honolulu'
 );
 
--- Find the second highest salary in the Employees table
+
 SELECT MAX(salary) AS SecondHighestSalary
 FROM Employees
 WHERE salary < (
